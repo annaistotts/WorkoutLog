@@ -6,7 +6,8 @@ import { initDB } from "./db.js";
 import apiRouter from "./routes/index.js";
 
 import swaggerUi from "swagger-ui-express";
-import openapi from "./swagger.json" assert { type: "json" };
+import { readFileSync } from "fs";
+const openapi = JSON.parse(readFileSync(new URL("./swagger.json", import.meta.url)));
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.use("/api", apiRouter);
 
 const port = process.env.PORT || 8080;
 initDB().then(() => {
-  app.listen(port, () => console.log(`✅ API running on port ${port}`));
+  app.listen(port, () => console.log(`API running on port ${port}`));
 });
 
 
