@@ -41,7 +41,7 @@ DELETE {{base}}/api/workouts/
 
 
 
-@render = https://your-workoutlogger-app.onrender.com
+@render = https://workoutlog-pa84.onrender.com
 
 ### Render: Health
 GET {{render}}/health
