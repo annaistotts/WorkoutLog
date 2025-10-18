@@ -1,0 +1,246 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Workout Logger API",
+    "version": "1.0.0",
+    "description": "Design-first docs for the Workout Logger project. Shows GET, GET by ID, POST, PUT, DELETE for /api/workouts."
+  },
+  "servers": [
+    { "url": "/" }
+  ],
+  "tags": [
+    { "name": "Workouts", "description": "Workout CRUD operations" }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": ["System"],
+        "responses": {
+          "200": {
+            "description": "Service is up",
+            "content": {
+              "application/json": {
+                "example": { "ok": true }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts": {
+      "get": {
+        "summary": "List all workouts",
+        "tags": ["Workouts"],
+        "responses": {
+          "200": {
+            "description": "Array of workouts",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Workout" } },
+                "examples": {
+                  "sample": {
+                    "value": [
+                      {
+                        "_id": "6712e4d5a0c2b9b44b123456",
+                        "date": "2025-10-18",
+                        "durationMin": 45,
+                        "intensity": "moderate",
+                        "notes": "Morning session",
+                        "exercises": [
+                          { "name": "Squat", "sets": 3, "reps": 10, "weight": 90, "notes": "Felt strong" }
+                        ],
+                        "createdAt": "2025-10-18T15:10:00.000Z",
+                        "updatedAt": "2025-10-18T15:10:00.000Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new workout",
+        "tags": ["Workouts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["date", "durationMin", "intensity"],
+                "properties": {
+                  "date": { "type": "string", "example": "2025-10-18" },
+                  "durationMin": { "type": "integer", "example": 45 },
+                  "intensity": { "type": "string", "enum": ["easy", "moderate", "hard"], "example": "moderate" },
+                  "notes": { "type": "string", "example": "REST client insert" },
+                  "exercises": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Exercise" }
+                  }
+                }
+              },
+              "examples": {
+                "sample": {
+                  "value": {
+                    "date": "2025-10-18",
+                    "durationMin": 45,
+                    "intensity": "moderate",
+                    "notes": "REST client insert",
+                    "exercises": [
+                      { "name": "Squat", "sets": 3, "reps": 10, "weight": 90 }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created workout with new id",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Workout" },
+                "examples": {
+                  "sample": {
+                    "value": {
+                      "_id": "6712e4d5a0c2b9b44b123456",
+                      "date": "2025-10-18",
+                      "durationMin": 45,
+                      "intensity": "moderate",
+                      "notes": "REST client insert",
+                      "exercises": [
+                        { "name": "Squat", "sets": 3, "reps": 10, "weight": 90 }
+                      ],
+                      "createdAt": "2025-10-18T15:10:00.000Z",
+                      "updatedAt": "2025-10-18T15:10:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "VALIDATION_ERROR",
+                  "message": "Required: date (string), durationMin (number), intensity (string)."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{id}": {
+      "get": {
+        "summary": "Get workout by ID",
+        "tags": ["Workouts"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workout found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Workout" }
+              }
+            }
+          },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a workout",
+        "tags": ["Workouts"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkoutUpdate" },
+              "examples": {
+                "sample": {
+                  "value": { "durationMin": 50, "notes": "Updated via REST client" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workout updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Workout" }
+              }
+            }
+          },
+          "422": { "description": "Validation error" },
+          "404": { "description": "Not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a workout",
+        "tags": ["Workouts"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "204": { "description": "Deleted (no content)" },
+          "404": { "description": "Not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Exercise": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Squat" },
+          "sets": { "type": "integer", "example": 3 },
+          "reps": { "type": "integer", "example": 10 },
+          "weight": { "type": "number", "example": 90 },
+          "notes": { "type": "string", "example": "Felt strong" }
+        }
+      },
+      "Workout": {
+        "type": "object",
+        "required": ["date", "durationMin", "intensity"],
+        "properties": {
+          "_id": { "type": "string", "example": "6712e4d5a0c2b9b44b123456" },
+          "date": { "type": "string", "example": "2025-10-18" },
+          "durationMin": { "type": "integer", "example": 45 },
+          "intensity": { "type": "string", "enum": ["easy", "moderate", "hard"], "example": "moderate" },
+          "notes": { "type": "string", "example": "Morning session" },
+          "exercises": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Exercise" }
+          },
+          "createdAt": { "type": "string", "example": "2025-10-18T15:10:00.000Z" },
+          "updatedAt": { "type": "string", "example": "2025-10-18T15:10:00.000Z" }
+        }
+      },
+      "WorkoutUpdate": {
+        "type": "object",
+        "description": "Any subset of fields allowed on update",
+        "properties": {
+          "date": { "type": "string", "example": "2025-10-18" },
+          "durationMin": { "type": "integer", "example": 50 },
+          "intensity": { "type": "string", "enum": ["easy", "moderate", "hard"], "example": "hard" },
+          "notes": { "type": "string", "example": "Updated note" },
+          "exercises": { "type": "array", "items": { "$ref": "#/components/schemas/Exercise" } }
+        }
+      }
+    }
+  }
+}
