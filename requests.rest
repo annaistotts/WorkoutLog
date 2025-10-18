@@ -1,0 +1,80 @@
+@base = http://localhost:8080
+
+### Health
+GET {{base}}/health
+
+### All Workouts
+GET {{base}}/api/workouts
+
+### Get Workout by ID - don't forget to add id
+GET {{base}}/api/workouts/
+
+### Create a New Workout
+POST {{base}}/api/workouts
+Content-Type: application/json
+
+{
+  "date": "2025-10-18",
+  "durationMin": 45,
+  "intensity": "moderate",
+  "notes": "REST client insert",
+  "exercises": [
+    { "name": "Squat", "sets": 3, "reps": 10, "weight": 90 },
+    { "name": "Bench Press", "sets": 3, "reps": 8, "weight": 70 }
+  ]
+}
+
+### Update a Workout - don't forget to add id
+PUT {{base}}/api/workouts/
+Content-Type: application/json
+
+{
+  "durationMin": 50,
+  "notes": "Updated via REST client"
+}
+
+### Delete a Workout - don't forget to add id
+DELETE {{base}}/api/workouts/
+
+
+
+
+
+
+@render = https://your-workoutlogger-app.onrender.com
+
+### Render: Health
+GET {{render}}/health
+
+### Render: All Workouts
+GET {{render}}/api/workouts
+
+### Render: Get Workout by ID - don't forget to add id
+GET {{render}}/api/workouts/
+
+### Render: Create a New Workout
+POST {{render}}/api/workouts
+Content-Type: application/json
+
+{
+  "date": "2025-10-18",
+  "durationMin": 30,
+  "intensity": "easy",
+  "notes": "Deployed insert",
+  "exercises": [
+    { "name": "Jump Rope", "sets": 1, "reps": 100, "weight": 0 }
+  ]
+}
+
+### Render: Update a Workout - don't forget to add id
+PUT {{render}}/api/workouts/
+Content-Type: application/json
+
+{
+  "notes": "Updated via Render"
+}
+
+### Render: Delete a Workout - don't forget to add id
+DELETE {{render}}/api/workouts/
+
+
