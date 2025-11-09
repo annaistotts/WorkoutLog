@@ -21,6 +21,10 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use("/api", apiRouter);
 
+// Error handling middleware should be last
+import { errorHandler } from "./middleware/errorHandler.js";
+app.use(errorHandler);
+
 const port = process.env.PORT || 8080;
 initDB().then(() => {
   app.listen(port, () => console.log(`API running on port ${port}`));

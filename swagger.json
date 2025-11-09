@@ -123,13 +123,35 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid JSON payload",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "INVALID_JSON",
+                  "message": "Invalid JSON payload"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation error",
             "content": {
               "application/json": {
                 "example": {
                   "error": "VALIDATION_ERROR",
-                  "message": "Required: date (string), durationMin (number), intensity (string)."
+                  "message": "date is required, durationMin must be a number, intensity must be one of: low, medium, high"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "SERVER_ERROR",
+                  "message": "An unexpected error occurred"
                 }
               }
             }
